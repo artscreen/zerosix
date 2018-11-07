@@ -36,6 +36,7 @@ Dim LogTotCell As Range
 
 Dim reqmt_return As Integer
 
+Dim password as string
 Dim Answer As Integer
 
 
@@ -43,6 +44,8 @@ Dim Answer As Integer
 Sub POLogEntry()
 
 Application.ScreenUpdating = False
+
+set password = "password"
 
 'remove password protection
     sbUnProtectSheet
@@ -177,7 +180,7 @@ Sub PrintDefault()
     End If
     DescriptionCheck
     
-    POFormWS.PrintOut
+    POFormWS.PrintPreview
     
     'MsgBox ("Printed")
 
@@ -185,20 +188,14 @@ End Sub
 
 Sub sbProtectSheet()
 
-    ActiveSheet.Protect "password", True, True
-    'ActiveWorkbook.Sheets("POLog").Protect "password", DrawingObjects:=True, Contents:=True, Scenarios:=True, _
-        'UserInterfaceOnly:=True, AllowFormattingCells:=False, AllowFormattingColumns:=False, _
-        'AllowFormattingRows:=False, AllowInsertingColumns:=False, AllowInsertingRows:=False, _
-        'AllowInsertingHyperlinks:=False, AllowDeletingColumns:=False, AllowDeletingRows:=False, _
-        'AllowSorting:=True, AllowFiltering:=True, AllowUsingPivotTables:=False
-
+    ActiveSheet.Protect password, True, True
+    
 End Sub
 
 Sub sbUnProtectSheet()
 
-    ActiveSheet.Unprotect "password"
-    'ActiveWorkbook.Sheets("POLog").Unprotect "password"
-
+    ActiveSheet.Unprotect password
+    
 End Sub
 
 Sub AddressForm_Show()
@@ -272,12 +269,10 @@ Sub SavetoFile()
     fpath = ThisWorkbook.Path & "\Purchase Orders\"
     fsave = fpath & fname
     
-    'ActiveWorkbook.ActiveSheet.Copy
     
       
     Sheets("POEntry").Copy
     Sheets("POEntry").Select
-    'ActiveSheet.Unprotect
     Columns("O:O").Select
     Range(Selection, Selection.End(xlToRight)).Delete Shift:=xlToLeft
     Range("purchase_order").Copy

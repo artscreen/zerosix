@@ -1,0 +1,264 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"POW",
+				"POBookWB"
+			],
+			[
+				"po",
+				"POGLCell"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"vb",
+				"Set Syntax: VBScript"
+			],
+			[
+				"syn",
+				"Set Syntax: VBScript"
+			],
+			[
+				"Package Control: git",
+				"Package Control: Add Repository"
+			],
+			[
+				"sql",
+				"Set Syntax: SQL"
+			],
+			[
+				"theme",
+				"UI: Select Theme"
+			],
+			[
+				"power",
+				"Set Syntax: PowerShell"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"vbs",
+				"Set Syntax: VBScript"
+			],
+			[
+				"bat",
+				"Set Syntax: Batch File"
+			],
+			[
+				"syntax: v",
+				"Set Syntax: VBScript"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"add",
+				"Package Control: Advanced Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"get",
+				"Install Package Control"
+			],
+			[
+				"synta",
+				"Set Syntax: Batch File"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/csmith/Documents/GitHub/zerosix",
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS",
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Forms",
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Modules"
+	],
+	"file_history":
+	[
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Forms/Address_Form.frm",
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Forms/Address_Form.vbs",
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Module1.vbs",
+		"/C/Users/csmith/Documents/GitHub/zerosix/file",
+		"/Y/Global/Powershell Scripts/admins.txt",
+		"/Y/Global/Powershell Scripts/New Text Document.txt",
+		"/Y/VAN/Van Toshiba Printer Add",
+		"/Y/VAN/PDQ Repository/Map Drives/Map Misc drive.bat",
+		"/Y/Map Misc drive.bat",
+		"/Y/SSide/SS Mount Drives Coper-Jesse.txt",
+		"/G/PDQ Repository/BlueBeam/v17/2017 cmd .txt",
+		"/C/Temp/ss-lastlogons.txt",
+		"//10.150.4.10/PDQ Repository/MSOffice2016CTR/installconfig.xml",
+		"/C/Users/csmith/Downloads/user export4.csv",
+		"/G/PDQ Repository/IPConfig commands/release-renew.bat",
+		"/G/PDQ Repository/Firewall sophos rules/sophos setup.bat",
+		"/G/PDQ Repository/Firewall F and P rules enable/file_print_rules.bat",
+		"/G/PDQ Repository/IPConfig commands/flushdns.bat",
+		"/G/PDQ Repository/Firewall F and P rules enable/file_print_rules - Copy.bat",
+		"/G/PDQ Repository/Firewall F and P rules enable/FireWall Rules.ps",
+		"/Z/map all.bat",
+		"/Z/dhcp lease.txt"
+	],
+	"find":
+	{
+		"height": 41.0
+	},
+	"find_in_files":
+	{
+		"height": 105.0,
+		"where_history":
+		[
+			"C:\\Users\\csmith\\Documents\\GitHub\\zerosix\\PO FORMS"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"copy_image",
+			"copytab"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 40.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "EXCEL_PO.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 230.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
