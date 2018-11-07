@@ -28,6 +28,26 @@
 		"selected_items":
 		[
 			[
+				"colo",
+				"UI: Select Color Scheme"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"scheme",
+				"UI: Select Color Scheme"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
 				"vb",
 				"Set Syntax: VBScript"
 			],
@@ -109,12 +129,18 @@
 	"expanded_folders":
 	[
 		"/C/Users/csmith/Documents/GitHub/zerosix",
+		"/C/Users/csmith/Documents/GitHub/zerosix/FTM",
 		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS",
 		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Forms",
 		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Modules"
 	],
 	"file_history":
 	[
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Modules/Module1.bas",
+		"/C/Users/csmith/Documents/GitHub/zerosix/FTM/ftm lookahead code.vbs",
+		"/C/Users/csmith/Documents/GitHub/zerosix/ftm lookahead code.vbs",
+		"/C/Users/csmith/Documents/GitHub/zerosix/BAS Export/Module1.bas",
+		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Modules/Module1.vbs",
 		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Forms/Address_Form.frm",
 		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Forms/Address_Form.vbs",
 		"/C/Users/csmith/Documents/GitHub/zerosix/PO FORMS/Module1.vbs",
@@ -155,6 +181,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Answer",
 			"copy_image",
 			"copytab"
 		],
@@ -253,7 +280,7 @@
 	{
 	},
 	"show_minimap": true,
-	"show_open_files": false,
+	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 230.0,
