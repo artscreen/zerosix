@@ -29,7 +29,8 @@ Sub importrecap()
 	Dim endtime As Date
 	Dim dateinput As Date
 	Dim dateoutput As Date
-	
+	dim password as String
+
 	set password = "PASSWORD"
 	sbUnProtectSheet
 	Application.ScreenUpdating = False
