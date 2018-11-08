@@ -3,18 +3,12 @@ Option Compare Text
 Sub SUBahead()
 Attribute SUBahead.VB_ProcData.VB_Invoke_Func = "I\n14"
 
-    Dim recap As Workbook
     Dim recaptab As Worksheet
     Dim report As Workbook
     Dim data As Worksheet
-    Dim filename As Variant
     Dim lastrow As Double
-    Dim output As Integer
-    Dim errorout As Integer
     Dim descr As String
     Dim descrfix As String
-    Dim deliverydate As String
-    Dim fabricator As String
     Dim tonnage As Variant
     Dim matrixrow As Integer
     Dim matrixrowend As Integer
@@ -29,7 +23,6 @@ Attribute SUBahead.VB_ProcData.VB_Invoke_Func = "I\n14"
     Dim delcol As String
     Dim fabcol As String
     Dim seqcol As String
-    Dim i As Integer
     Dim username As String
     Dim ofacol As String
     Dim bfacol As String
@@ -58,7 +51,6 @@ Attribute SUBahead.VB_ProcData.VB_Invoke_Func = "I\n14"
     reportdate = Now()
     starttime = Now()
     lastrow = 2
-    i = 0
          
     
     'clear data table
@@ -106,8 +98,7 @@ Attribute SUBahead.VB_ProcData.VB_Invoke_Func = "I\n14"
           
           
                 For matrixrow = 29 To matrixrowend
-                On Error GoTo ErrorMessage
-                'see if the dates are valid
+                On Error GoTo Resume Next
                     If rffdatecheck(recaptab.Range(rffdatecol & matrixrow).Value) = True Then
                        
                         descrfix = Left(Replace(recaptab.Range(seqcol & matrixrow).Value, "SEQUENCE", "SEQ"), 15)
@@ -157,13 +148,10 @@ Attribute SUBahead.VB_ProcData.VB_Invoke_Func = "I\n14"
                         data.Range("e" & lastrow).Value = pename
                         data.Range("g" & lastrow).Value = tonnage
                         data.Range("H" & lastrow).Value = status
-                        'data.Range("I" & lastrow).Value = Now()
-                        'Debug.Print Now() & " - " & recaptab.Name & " -entry- " & matrixrow
                         lastrow = lastrow + 1
                     End If
                 Next matrixrow
             End If
-            'Debug.Print Now() & " - " & recaptab.Name & " -skip- " & matrixrow
         Next recaptab
     
   
@@ -172,26 +160,15 @@ Attribute SUBahead.VB_ProcData.VB_Invoke_Func = "I\n14"
     Application.Calculation = xlCalculationAutomatic
     
  
-    
-ErrorMessage:
-    'i = i + 1
-    'Debug.Print "error - " & i
-    Resume Next
-    
-    Application.Calculation = xlCalculationAutomatic
-    
-    
 End Sub
 
 Public Function rffdatecheck(cellvalue As Variant) As Boolean
     
      If cellvalue Like "*[a-zA-Z]*" Or cellvalue = "0" Or cellvalue = " " Or cellvalue = "" Or cellvalue = "-" Or cellvalue < Now() - 14 Then
         rffdatecheck = False
-        'Debug.Print "RFF False"
         Exit Function
     End If
         rffdatecheck = True
-        'Debug.Print "RFF TRUE"
 End Function
 
 

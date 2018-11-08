@@ -14,23 +14,23 @@ Sub importrecap()
 	Dim tonnage As Variant
 	Dim matrixrow As Integer
 	Dim matrixrowend As Integer
-	Dim starttime As Date
-	Dim endtime As Date
-	Dim reportdate As Date
 	Dim lookup As Worksheet
 	Dim lookahead As Worksheet
-	Dim selectdate As Date
 	Dim toncol As String
 	Dim rffcol As String
 	Dim modtcol As String
 	Dim delcol As String
 	Dim fabcol As String
 	Dim seqcol As String
-	Dim i_count As Integer
 	Dim username As String
+	Dim reportdate As Date
+	Dim selectdate As Date
+	Dim starttime As Date
+	Dim endtime As Date
 	Dim dateinput As Date
 	Dim dateoutput As Date
 	
+	set password = "PASSWORD"
 	sbUnProtectSheet
 	Application.ScreenUpdating = False
 	Application.Calculation = xlCalculationManual
@@ -50,7 +50,6 @@ Sub importrecap()
 	endtime = starttime + 20
 	
 	lastrow = 2
-	i_count = 0
 	
 
 	data.Range("a2:d10000").ClearContents
@@ -179,10 +178,10 @@ Public Function toncheck(rff As Variant, modt As Variant) As Boolean
 End Function
 
 Sub sbProtectSheet()
-	ActiveSheet.Protect "PASSWORD", True, True
+	ActiveSheet.Protect password, True, True
 End Sub
 
 Sub sbUnProtectSheet()
-	ActiveSheet.Unprotect "PASSWORD"
+	ActiveSheet.Unprotect password
 End Sub
 
