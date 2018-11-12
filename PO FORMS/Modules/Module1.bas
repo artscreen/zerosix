@@ -113,7 +113,7 @@ End Sub
 
 Sub PO_Number()
     
-    POPrefix = POSetupWS.Range("M1").Value
+    POPrefix = POSetupWS.Range("Prefix").Value
     POIncrement = Right(PONumCell.Value, 6)
     PONextNumber = POPrefix & (POIncrement + 1)
     PONumCell.Value = PONextNumber
@@ -162,19 +162,63 @@ Sub ClearForm()
 End Sub
 
 Sub PrintDefault()
-
+    sbUnProtectSheet
     Set POBookWB = ActiveWorkbook
     Set POFormWS = POBookWB.Sheets("POEntry")
     
     'run sub for description check to see if it is empty
     ReqmtCheck
     If reqmt_return = 1 Then
+        MsgBox "Please Fill in Required Fields"
         Exit Sub
     End If
+    
     DescriptionCheck
     
+    If POFormWS.Range("hide_check").Value = "x" Then
+        POFormWS.Range("overflow").EntireRow.Hidden = False
+    End If
+
+
+    POFormWS.PrintOut
+    
+    If POFormWS.Range("hide_check").Value = "x" Then
+        POFormWS.Range("overflow").EntireRow.Hidden = True
+    End If
+
+    sbProtectSheet
+    'MsgBox ("Printed")
+
+End Sub
+
+Sub PrintPreview()
+    sbUnProtectSheet
+    Set POBookWB = ActiveWorkbook
+    Set POFormWS = POBookWB.Sheets("POEntry")
+    
+    
+    
+    'run sub for description check to see if it is empty
+    ReqmtCheck
+    If reqmt_return = 1 Then
+        MsgBox "Please Fill in Required Fields"
+        Exit Sub
+    End If
+    
+    DescriptionCheck
+    
+    If POFormWS.Range("hide_check").Value = "x" Then
+        POFormWS.Range("overflow").EntireRow.Hidden = False
+    End If
+
+
     POFormWS.PrintPreview
     
+    If POFormWS.Range("hide_check").Value = "x" Then
+        POFormWS.Range("overflow").EntireRow.Hidden = True
+    End If
+
+    sbProtectSheet
     'MsgBox ("Printed")
 
 End Sub
@@ -229,7 +273,6 @@ Sub ReqmtCheck()
      
     
     If POVendorCell.Value = "" Or POJobCell.Value = "" Or POGLCell.Value = "Select" Then
-        MsgBox "Please Fill in Required Fields"
         reqmt_return = 1
         Exit Sub
     End If
@@ -239,8 +282,10 @@ Sub ReqmtCheck()
 End Sub
 
 Sub ConfirmForm_Show()
+    
     ReqmtCheck
     If reqmt_return = 1 Then
+        DescriptionForm.Show
         Exit Sub
     End If
     
@@ -253,6 +298,19 @@ Sub ConfirmForm_Show()
     Confirmation_Form2.Show
 
 End Sub
+Sub HideRowToggle()
+    sbUnProtectSheet
+    Set POBookWB = ActiveWorkbook
+    Set POFormWS = POBookWB.Sheets("POEntry")
+    If POFormWS.Range("overflow").EntireRow.Hidden = True Then
+        POFormWS.Range("overflow").EntireRow.Hidden = False
+        POFormWS.Range("hide_check").Value = ""
+        Else
+    POFormWS.Range("overflow").EntireRow.Hidden = True
+    POFormWS.Range("hide_check").Value = "x"
+    End If
+    sbProtectSheet
+End Sub
 
 
 Sub SavetoFile()
@@ -264,8 +322,6 @@ Sub SavetoFile()
     Application.DisplayAlerts = False
     
     fname = ActiveWorkbook.ActiveSheet.Range("ponumber").Value & " - " & RepIllegalChar(ActiveWorkbook.ActiveSheet.Range("vendor").Value, "_") & ".xlsx"
-    Debug.Print ActiveWorkbook.ActiveSheet.Range("ponumber").Value & " - " & ActiveWorkbook.ActiveSheet.Range("vendor").Value & ".xlsx"
-    Debug.Print fname
     fpath = ThisWorkbook.Path & "\Purchase Orders\"
     fsave = fpath & fname
     
@@ -288,7 +344,8 @@ Sub SavetoFile()
     Range("A1").Select
     ActiveWorkbook.SaveAs fsave, FileFormat:=51
     ActiveWorkbook.Close
-    
+    Application.ScreenUpdating = True
+
  
 End Sub
 
@@ -303,4 +360,6 @@ End Sub
 
     RepIllegalChar = strIn
 End Function
+
+
 

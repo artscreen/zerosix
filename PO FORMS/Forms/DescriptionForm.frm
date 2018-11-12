@@ -13,29 +13,31 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private Sub CommandButton1_Click()
-    If DescriptionBox.Value = "" Then
-        MsgBox "Description Required"
-    Exit Sub
-    End If
-        
+
+Private Sub SaveButton_Click()
+   
     ActiveWorkbook.Sheets("POEntry").Range("Description").Value = DescriptionBox.Value
+    ActiveWorkbook.Sheets("POEntry").Range("vendor").Value = VendorBox.Value
+    ActiveWorkbook.Sheets("POEntry").Range("jobnumber").Value = JobBox.Value
+    ActiveWorkbook.Sheets("POEntry").Range("GLDesc").Value = GLBox.Value
     Unload Me
-
+    Confirmation_Form2.Show
 End Sub
 
-Private Sub CommandButton2_Click()
+Private Sub CancelButton_Click()
     Unload Me
-End Sub
-
-Private Sub UserForm_Click()
-
 End Sub
 
 Private Sub UserForm_Initialize()
-
+    Dim gllist As String
+    gllist = ActiveWorkbook.Sheets("Dropdowns").Range("prefix").Value
 With DescriptionBox
-    DescriptionBox.Value = ""
+    VendorBox.Value = ActiveWorkbook.Sheets("POEntry").Range("vendor").Value
+    JobBox.Value = ActiveWorkbook.Sheets("POEntry").Range("jobnumber").Value
+    GLBox.List = ActiveWorkbook.Sheets("Dropdowns").Range(gllist).Value
+    GLBox.Value = ActiveWorkbook.Sheets("POEntry").Range("GLDesc").Value
+    DescriptionBox.Value = ActiveWorkbook.Sheets("POEntry").Range("Description").Value
+    
 End With
 
 End Sub
