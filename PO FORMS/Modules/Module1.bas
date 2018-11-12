@@ -32,7 +32,6 @@ Dim LogTaxCell As Range
 Dim LogShipCell As Range
 Dim LogTotCell As Range
 Dim reqmt_return As Integer
-Dim Answer As Integer
 
  
 Sub POLogEntry()
