@@ -29,9 +29,7 @@ Sub importrecap()
 	Dim endtime As Date
 	Dim dateinput As Date
 	Dim dateoutput As Date
-	dim password as String
-
-	set password = "PASSWORD"
+	
 	sbUnProtectSheet
 	Application.ScreenUpdating = False
 	Application.Calculation = xlCalculationManual
@@ -179,10 +177,10 @@ Public Function toncheck(rff As Variant, modt As Variant) As Boolean
 End Function
 
 Sub sbProtectSheet()
-	ActiveSheet.Protect password, True, True
+	ActiveSheet.Protect "PASSWORD", True, True
 End Sub
 
 Sub sbUnProtectSheet()
-	ActiveSheet.Unprotect password
+	ActiveSheet.Unprotect "PASSWORD"
 End Sub
 
