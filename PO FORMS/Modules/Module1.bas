@@ -32,15 +32,14 @@ Dim LogTaxCell As Range
 Dim LogShipCell As Range
 Dim LogTotCell As Range
 Dim reqmt_return As Integer
-Dim PassWord as String
-Dim Answer as Integer
+Dim Answer As Integer
 
  
 Sub POLogEntry()
 
 Application.ScreenUpdating = False
 
-    set PassWord = "password"
+    
 
 'remove password protection
     sbUnProtectSheet
@@ -95,7 +94,7 @@ Application.ScreenUpdating = False
     LogTotCell = POTotCell.Value
     
 'add hyperlink to po number in log
-    POLogWS.Hyperlinks.Add Anchor:=LogNumCell, Address:="Purchase Orders\" & (PONumCell.Value) & ".xlsx", TextToDisplay:=(PONumCell.Value)
+    POLogWS.Hyperlinks.Add Anchor:=LogNumCell, Address:="Purchase Orders\" & PONumCell.Value & " - " & RepIllegalChar(POVendorCell.Value, "_") & ".xlsx", TextToDisplay:=PONumCell.Value
  
 'Save flat file to PO folder
     SavetoFile
@@ -115,8 +114,8 @@ End Sub
 
 Sub PO_Number()
     
-    POPrefix = POSetupWS.Range("M1").Value & "16"
-    POIncrement = Right(PONumCell.Value, 4)
+    POPrefix = POSetupWS.Range("M1").Value
+    POIncrement = Right(PONumCell.Value, 6)
     PONextNumber = POPrefix & (POIncrement + 1)
     PONumCell.Value = PONextNumber
 
@@ -183,18 +182,20 @@ End Sub
 
 Sub sbProtectSheet()
 
-    ActiveSheet.Protect PassWord, True, True
+    ActiveSheet.Protect "password", True, True
     
 End Sub
 
 Sub sbUnProtectSheet()
 
-    ActiveSheet.Unprotect PassWord
+    
+    ActiveSheet.Unprotect "password"
     'ActiveWorkbook.Sheets("POLog").Unprotect "password"
 
 End Sub
 
 Sub AddressForm_Show()
+    
     
     Address_Form.Show
 
@@ -245,6 +246,7 @@ Sub ConfirmForm_Show()
     End If
     
     DescriptionCheck
+    
     If ActiveWorkbook.Sheets("POEntry").Range("description").Value = "" Then
         Exit Sub
     End If
@@ -262,7 +264,9 @@ Sub SavetoFile()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     
-    fname = ActiveWorkbook.ActiveSheet.Range("ponumber").Value & ".xlsx"
+    fname = ActiveWorkbook.ActiveSheet.Range("ponumber").Value & " - " & RepIllegalChar(ActiveWorkbook.ActiveSheet.Range("vendor").Value, "_") & ".xlsx"
+    Debug.Print ActiveWorkbook.ActiveSheet.Range("ponumber").Value & " - " & ActiveWorkbook.ActiveSheet.Range("vendor").Value & ".xlsx"
+    Debug.Print fname
     fpath = ThisWorkbook.Path & "\Purchase Orders\"
     fsave = fpath & fname
     
@@ -286,7 +290,18 @@ Sub SavetoFile()
     ActiveWorkbook.SaveAs fsave, FileFormat:=51
     ActiveWorkbook.Close
     
-   
-      
-    
+ 
 End Sub
+
+ Function RepIllegalChar(strIn As String, strChar As String) As String
+    Dim strSpecialChars As String
+    Dim i As Long
+    strSpecialChars = "~""#%&*:<>?{|}/\[]" & Chr(10) & Chr(13)
+
+    For i = 1 To Len(strSpecialChars)
+        strIn = Replace(strIn, Mid$(strSpecialChars, i, 1), strChar)
+    Next
+
+    RepIllegalChar = strIn
+End Function
+
