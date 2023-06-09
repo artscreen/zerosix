@@ -40,6 +40,11 @@ Sub SplitGLtabs()
 
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
 
+    If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "KEY" Then
+        MsgBox "This ain't it, chief"
+        Exit Sub
+    End If
+
     WTabName = "W 120002"
     newtab.Name = WTabName
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
@@ -92,8 +97,9 @@ Sub SplitGLtabs()
     .Apply
     End With
 
-
+'Split Data amongst tabs based on Shape
     startrow = 2
+
     For Each cell In ShapeColumn
     
         If cell.Value <> "" Then
@@ -152,24 +158,20 @@ Sub SplitGLtabs()
         End If    
     Next cell
 
-    'If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "Type" Then
-    '    MsgBox "This ain't it, chief"
-    '    Exit Sub
-    'End If
-    
-'
-    '
-    'RecvSheet.Activate
+ 
 
-WTab.UsedRange.EntireColumn.AutoFit
-LTab.UsedRange.EntireColumn.AutoFit
-CTab.UsedRange.EntireColumn.AutoFit
-PLTab.UsedRange.EntireColumn.AutoFit
-RBTab.UsedRange.EntireColumn.AutoFit
-HSSTab.UsedRange.EntireColumn.AutoFit
-COITab.UsedRange.EntireColumn.AutoFit
+'Autosize all data columns
+    WTab.UsedRange.EntireColumn.AutoFit
+    LTab.UsedRange.EntireColumn.AutoFit
+    CTab.UsedRange.EntireColumn.AutoFit
+    PLTab.UsedRange.EntireColumn.AutoFit
+    RBTab.UsedRange.EntireColumn.AutoFit
+    HSSTab.UsedRange.EntireColumn.AutoFit
+    COITab.UsedRange.EntireColumn.AutoFit
 
-    Application.ScreenUpdating = True
+
+
+Application.ScreenUpdating = True
 
 End Sub
 
