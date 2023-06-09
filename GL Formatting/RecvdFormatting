@@ -1,0 +1,182 @@
+Sub SplitGLtabs()
+    
+    Dim WB As Workbook
+    Dim RecvSheet As Worksheet
+    Dim RecvTable As ListObject
+    Dim newtab As Worksheet
+    Dim TabName As String
+    Dim ShapeColumn As Range
+    Dim POColumn As Range
+    Dim startrow As Long
+    Dim LastRow As Long
+    Dim NewtabEnd As Long
+    Dim WTabName As String
+    Dim LTabName As String
+    Dim CTabName As String
+    Dim PLTabName As String
+    Dim RBTabName As String
+    Dim HSSTabName As String
+    Dim COITabName As String
+    Dim WTab As Worksheet
+    Dim LTab As Worksheet
+    Dim CTab As Worksheet
+    Dim PLTab As Worksheet
+    Dim RBTab As Worksheet
+    Dim HSSTab As Worksheet
+    Dim COITab As Worksheet
+    Dim SecEnd As Long
+    Dim CopyChunk As Range
+    Dim TargetChunk As Range
+    
+
+    Application.ScreenUpdating = False
+
+    Set WB = ActiveWorkbook
+    Set RecvSheet = WB.Sheets("epm recvd")
+    Set RecvTable = RecvSheet.ListObjects("EPMRCVD")
+    
+    Set ShapeColumn = RecvSheet.Range("EPMRCVD[Shape]")
+    Set POColumn = RecvSheet.Range("EPMRCVD[PO]")
+
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+
+    WTabName = "W 120002"
+    newtab.Name = WTabName
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+    
+    LTabName = "L 120004"
+    newtab.Name = LTabName
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+    
+    CTabName = "C MC 120005"
+    newtab.Name = CTabName
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+    
+    PLTabName = "CP FB PL 120006"
+    newtab.Name = PLTabName
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+    
+    RBTabName = "RB REB SQ 120007"
+    newtab.Name = RBTabName
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+    
+    HSSTabName = "HSS HSSR PI 120007"
+    newtab.Name = HSSTabName
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+    
+    COITabName = "COI 120013"
+    newtab.Name = COITabName
+    
+
+    Set WTab = WB.Sheets(WTabName)
+    Set LTab = WB.Sheets(LTabName)
+    Set CTab = WB.Sheets(CTabName)
+    Set PLTab = WB.Sheets(PLTabName)
+    Set RBTab = WB.Sheets(RBTabName)
+    Set HSSTab = WB.Sheets(HSSTabName)
+    Set COITab = WB.Sheets(COITabName)
+
+    WTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value   
+    LTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    CTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    PLTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    RBTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    HSSTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    COITab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    
+    With RecvTable.Sort
+    .SortFields.Clear
+    .SortFields.Add Key:=ShapeColumn, Order:=xlDescending
+    .SortFields.Add Key:=POColumn, Order:=xlAscending
+    .Header = xlYes
+    .Apply
+    End With
+
+
+    startrow = 2
+    For Each cell In ShapeColumn
+    
+        If cell.Value <> "" Then
+          
+            If cell.Value <> cell.Offset(1, 0).Value Then
+                Debug.Print cell.Value & "--" & startrow & "--" & cell.Row
+
+                Set CopyChunk = RecvSheet.Range("B" & startrow & ":P" & cell.Row)
+
+                If cell.Value = "W" Or cell.Value = "S" Then
+                    LastRow = WTab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = WTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+
+                If cell.Value = "HSS" Or cell.Value = "HSSR" Or cell.Value = "PI" Then
+                    LastRow = HSSTab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = HSSTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+
+                If cell.Value = "L" Then
+                    LastRow = LTab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = LTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+
+                If cell.Value = "C" or cell.Value = "MC" Then
+                    LastRow = CTab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = CTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+                
+                If cell.Value = "CP" Or cell.Value = "FB" Or cell.Value = "PL" Then
+                    LastRow = PLTab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = PLTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+
+                If cell.Value = "RB" Or cell.Value = "REB" Or cell.Value = "SQ" Then
+                    LastRow = RBTab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = RBTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+
+                 If cell.Value = "COI" Then
+                    LastRow = COITab.Range("a10000").End(xlUp).Row + 1
+                    Set TargetChunk = COITab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    TargetChunk.Value = CopyChunk.Value
+                End If
+
+                
+                startrow = cell.Row + 1
+
+            End If
+        End If    
+    Next cell
+
+    'If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "Type" Then
+    '    MsgBox "This ain't it, chief"
+    '    Exit Sub
+    'End If
+    
+'
+    '
+    'RecvSheet.Activate
+
+WTab.UsedRange.EntireColumn.AutoFit
+LTab.UsedRange.EntireColumn.AutoFit
+CTab.UsedRange.EntireColumn.AutoFit
+PLTab.UsedRange.EntireColumn.AutoFit
+RBTab.UsedRange.EntireColumn.AutoFit
+HSSTab.UsedRange.EntireColumn.AutoFit
+COITab.UsedRange.EntireColumn.AutoFit
+
+    Application.ScreenUpdating = True
+
+End Sub
+
+
+
+
+
+
+
+
