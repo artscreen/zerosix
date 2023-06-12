@@ -1,4 +1,4 @@
-Sub SplitGLtabs()
+Sub RecvdFormattingtabs()
     
     Dim WB As Workbook
     Dim RecvSheet As Worksheet
@@ -27,7 +27,8 @@ Sub SplitGLtabs()
     Dim SecEnd As Long
     Dim CopyChunk As Range
     Dim TargetChunk As Range
-    
+    Dim formatChunk As Range
+    Dim i As Integer
 
     Application.ScreenUpdating = False
 
@@ -38,12 +39,14 @@ Sub SplitGLtabs()
     Set ShapeColumn = RecvSheet.Range("EPMRCVD[Shape]")
     Set POColumn = RecvSheet.Range("EPMRCVD[PO]")
 
-    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
-
+'Filecheck
     If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "KEY" Then
         MsgBox "This ain't it, chief"
         Exit Sub
     End If
+'
+    Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
+
 
     WTabName = "W 120002"
     newtab.Name = WTabName
@@ -81,13 +84,13 @@ Sub SplitGLtabs()
     Set HSSTab = WB.Sheets(HSSTabName)
     Set COITab = WB.Sheets(COITabName)
 
-    WTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value   
-    LTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
-    CTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
-    PLTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
-    RBTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
-    HSSTab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
-    COITab.range("a1:o1").value = RecvSheet.Range("B1:P1").value
+    WTab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
+    LTab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
+    CTab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
+    PLTab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
+    RBTab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
+    HSSTab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
+    COITab.Range("a1:p1").Value = RecvSheet.Range("a1:p1").Value
     
     With RecvTable.Sort
     .SortFields.Clear
@@ -105,49 +108,49 @@ Sub SplitGLtabs()
         If cell.Value <> "" Then
           
             If cell.Value <> cell.Offset(1, 0).Value Then
-                Debug.Print cell.Value & "--" & startrow & "--" & cell.Row
+                'Debug.Print cell.Value & "--" & startrow & "--" & cell.Row
 
-                Set CopyChunk = RecvSheet.Range("B" & startrow & ":P" & cell.Row)
+                Set CopyChunk = RecvSheet.Range("a" & startrow & ":P" & cell.Row)
 
                 If cell.Value = "W" Or cell.Value = "S" Then
                     LastRow = WTab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = WTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = WTab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
 
                 If cell.Value = "HSS" Or cell.Value = "HSSR" Or cell.Value = "PI" Then
                     LastRow = HSSTab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = HSSTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = HSSTab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
 
                 If cell.Value = "L" Then
                     LastRow = LTab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = LTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = LTab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
 
-                If cell.Value = "C" or cell.Value = "MC" Then
+                If cell.Value = "C" Or cell.Value = "MC" Then
                     LastRow = CTab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = CTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = CTab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
                 
                 If cell.Value = "CP" Or cell.Value = "FB" Or cell.Value = "PL" Then
                     LastRow = PLTab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = PLTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = PLTab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
 
                 If cell.Value = "RB" Or cell.Value = "REB" Or cell.Value = "SQ" Then
                     LastRow = RBTab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = RBTab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = RBTab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
 
                  If cell.Value = "COI" Then
                     LastRow = COITab.Range("a10000").End(xlUp).Row + 1
-                    Set TargetChunk = COITab.Range("A" & LastRow & ":O" & LastRow + cell.Row - startrow)
+                    Set TargetChunk = COITab.Range("A" & LastRow & ":p" & LastRow + cell.Row - startrow)
                     TargetChunk.Value = CopyChunk.Value
                 End If
 
@@ -155,10 +158,50 @@ Sub SplitGLtabs()
                 startrow = cell.Row + 1
 
             End If
-        End If    
+        End If
     Next cell
 
- 
+'Format PO Sections
+LastRow = WTab.Range("a10000").End(xlUp).Row
+startrow = 2
+Set ShapeColumn = WTab.Range("l2:l" & LastRow + 50)
+    For i = 1 To LastRow + 50
+        If WTab.Range("M" & i).Value <> "" Then
+            If WTab.Range("M" & i).Value <> WTab.Range("M" & i).Offset(1, 0).Value Then
+                WTab.Range("M" & i + 1).EntireRow.Insert
+                Set formatChunk = WTab.Range("A" & startrow + 1 & ":R" & i + 1)
+                debug.print formatchunk.rows.count
+                WTab.Range("j" & i + 1).Formula = "=Subtotal(9,J" & startrow + 1 & ":j" & i & ")"
+                WTab.Range("M" & i + 1).Value = WTab.Range("M" & i).Value & " Total"
+                WTab.Range("M" & i + 1).font.bold = true
+                WTab.Range("Q" & i+1).value = "TOTAL"
+                if formatchunk.rows.count > 2 then
+                    WTab.Range("Q" & i-1).value = "EPM"
+                    WTab.Range("Q" & i).value = "SL"
+                    WTab.Range("R" & i-1).formula = "=j" & i + 1
+                    WTab.Range("R" & i+1).formula = "=r" & i-1 & "-r" & i
+                End If    
+            
+
+                formatChunk.BorderAround _
+                LineStyle:=xlContinuous, _
+                Weight:=xlThick
+                'formatChunk.Interior.Color = _
+                'RGB((Application.WorksheetFunction.RandBetween(0, 255)), _
+                '(Application.WorksheetFunction.RandBetween(0, 255)), _
+                '(Application.WorksheetFunction.RandBetween(0, 255)))
+                startrow = i + 1
+                i = i + 1
+            End If
+        End If
+    Next
+WTab.Range("J2").EntireRow.Delete
+LastRow = WTab.Range("a10000").End(xlUp).Row
+WTab.Range("J" & LastRow + 2).Formula = "=Subtotal(9,J2:j" & LastRow & ")"
+wtab.range("J:J").Style = "Fixed"
+wtab.range("R:R").Style = "Currency"
+
+
 
 'Autosize all data columns
     WTab.UsedRange.EntireColumn.AutoFit
@@ -174,6 +217,8 @@ Sub SplitGLtabs()
 Application.ScreenUpdating = True
 
 End Sub
+
+
 
 
 
