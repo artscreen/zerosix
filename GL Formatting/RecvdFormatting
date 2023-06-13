@@ -1,4 +1,4 @@
-Sub RecvdFormattingtabs()
+Sub EPMReceived_Processing()
     
     Dim WB As Workbook
     Dim RecvSheet As Worksheet
@@ -36,6 +36,8 @@ Sub RecvdFormattingtabs()
     
     Application.ScreenUpdating = False
 
+    on error resume next
+
     Set WB = ActiveWorkbook
     Set RecvSheet = WB.Sheets("epm recvd")
     Set RecvTable = RecvSheet.ListObjects("EPMRCVD")
@@ -44,19 +46,17 @@ Sub RecvdFormattingtabs()
     Set POColumn = RecvSheet.Range("EPMRCVD[PO]")
 
 'Filecheck
-    'If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "KEY" Then
-    '    MsgBox "This ain't it, chief"
-    '    Exit Sub
-    'End If
+    If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "KEY" Then
+        MsgBox "This ain't it, chief"
+        Exit Sub
+    End If
     
     msgbox "Select the Processed GL Detail file"
     filepath = Application.getopenfilename()
     if filepath <> false then 
-    'msgbox filepath
-    workbooks.open(filepath)
-    set glb = activeworkbook
-    'msgbox glb.name
-    wb.activate
+        workbooks.open(filepath)
+        set glb = activeworkbook
+        wb.activate
     end if
 
 
@@ -182,7 +182,6 @@ TheRefs = Array(WTabName,LTabName,CTabName,PLTabName,RBTabName,HSSTabName,COITab
 dim wi as Long
 
 for wi = 0 to 6
-'debug.print theRefs(wi) & glb.name
 LastRow = TheTabs(wi).Range("a10000").End(xlUp).Row
 startrow = 2
 u = 0
@@ -219,10 +218,14 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
                 End If
                 if formatchunk.rows.count = 2 then
                     TheTabs(wi).Range("R" & i+1).formula = "=j" & i + 1 & "-r" & i
-                End If        
-                ReDim Preserve varDiffVals(0 To u)
-                varDiffVals(u)= "r" & TheTabs(wi).Range("R" & i+1).row
-                u = u + 1
+                End If
+
+                If Abs(TheTABS(wi).Range("R" & i + 1).Value) < 2 Then
+                    ReDim Preserve varDiffVals(0 To u)
+                    varDiffVals(u)= "r" & TheTabs(wi).Range("R" & i+1).row
+                    u = u + 1
+                    formatChunk.interior.color = RGB(0,176,240)
+                End if    
 
                 formatChunk.BorderAround _
                 LineStyle:=xlContinuous, _
@@ -252,6 +255,7 @@ TheTabs(wi).Range("R" & Lastrow + 3).formula = "=SUM('["& glb.name & "]" & TheRe
 TheTabs(wi).Range("R" & Lastrow + 4).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L," & chr(34) & "Used" & chr(34) & ",'["& glb.name & "]" & TheRefs(wi) & "'!$K:$K) * -1"
 TheTabs(wi).Range("R" & LastRow + 5).Formula = "=sum(r" & lastrow + 2 & ":r" & lastrow + 4 & ")"
 TheTabs(wi).Range("R" & LastRow + 6).Formula = "=" & join(varDiffVals,"+")
+TheTabs(wi).Range("R" & LastRow + 6).interior.color = RGB(0,176,240)
 TheTabs(wi).Range("R" & LastRow + 7).Formula = "=(r" & lastrow + 5 & "-r" & lastrow + 6 & ")"
 
 TheTabs(wi).range("J:J").NumberFormat = "$#,##0.00_)"
@@ -266,15 +270,6 @@ TheTabs(wi).range("N:P").EntireColumn.hidden = true
 END IF
 
 next wi
-
-'Autosize all data columns
-    'LTab.UsedRange.EntireColumn.AutoFit
-    'CTab.UsedRange.EntireColumn.AutoFit
-    'PLTab.UsedRange.EntireColumn.AutoFit
-    'RBTab.UsedRange.EntireColumn.AutoFit
-    'HSSTab.UsedRange.EntireColumn.AutoFit
-    'COITab.UsedRange.EntireColumn.AutoFit
-
 
 GLB.Close SaveChanges:=False
 Application.ScreenUpdating = True
