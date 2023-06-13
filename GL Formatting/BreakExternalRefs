@@ -1,9 +1,15 @@
-Option Explicit
-
-Sub BreakExternalReferences()
+Sub BreakExternalReferences(control As IRibbonControl)
     Dim arLinks As Variant
     Dim i As Long
+    Dim Result As Integer
 
+    Result = MsgBox("This operation will remove all external links" & vbNewline & "and replace them with their current values." _
+    & vbNewline & "This operation CANNOT be undone." & vbNewline & "Are you sure you wish to Continue?", vbQuestion + vbYesNo)
+    
+    If Result = vbNo Then
+        exit Sub
+    End If
+    
     arLinks = ActiveWorkbook.LinkSources(Type:=xlLinkTypeExcelLinks)
 
     If IsArray(arLinks) Then
