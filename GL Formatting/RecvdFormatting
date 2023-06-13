@@ -24,12 +24,16 @@ Sub RecvdFormattingtabs()
     Dim RBTab As Worksheet
     Dim HSSTab As Worksheet
     Dim COITab As Worksheet
-    Dim SecEnd As Long
     Dim CopyChunk As Range
     Dim TargetChunk As Range
     Dim formatChunk As Range
     Dim i As Integer
-
+    Dim varDiffVals() as variant
+    Dim U as Integer
+    Dim TheTABS as variant
+    Dim TheRefs as variant
+    dim GLB as workbook
+    
     Application.ScreenUpdating = False
 
     Set WB = ActiveWorkbook
@@ -40,11 +44,22 @@ Sub RecvdFormattingtabs()
     Set POColumn = RecvSheet.Range("EPMRCVD[PO]")
 
 'Filecheck
-    If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "KEY" Then
-        MsgBox "This ain't it, chief"
-        Exit Sub
-    End If
-'
+    'If Application.Sheets.Count > 1 Or RecvSheet.Range("A1").Value <> "KEY" Then
+    '    MsgBox "This ain't it, chief"
+    '    Exit Sub
+    'End If
+    
+    msgbox "Select the Processed GL Detail file"
+    filepath = Application.getopenfilename()
+    if filepath <> false then 
+    'msgbox filepath
+    workbooks.open(filepath)
+    set glb = activeworkbook
+    'msgbox glb.name
+    wb.activate
+    end if
+
+
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
 
 
@@ -52,19 +67,19 @@ Sub RecvdFormattingtabs()
     newtab.Name = WTabName
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
     
-    LTabName = "L 120004"
+    LTabName = "L 120003"
     newtab.Name = LTabName
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
     
-    CTabName = "C MC 120005"
+    CTabName = "C MC 120004"
     newtab.Name = CTabName
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
     
-    PLTabName = "CP FB PL 120006"
+    PLTabName = "CP FB PL 120005"
     newtab.Name = PLTabName
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
     
-    RBTabName = "RB REB SQ 120007"
+    RBTabName = "RB REB SQ 120006"
     newtab.Name = RBTabName
     Set newtab = Sheets.Add(After:=Sheets(Sheets.Count))
     
@@ -75,7 +90,7 @@ Sub RecvdFormattingtabs()
     COITabName = "COI 120013"
     newtab.Name = COITabName
     
-
+    
     Set WTab = WB.Sheets(WTabName)
     Set LTab = WB.Sheets(LTabName)
     Set CTab = WB.Sheets(CTabName)
@@ -94,8 +109,8 @@ Sub RecvdFormattingtabs()
     
     With RecvTable.Sort
     .SortFields.Clear
-    .SortFields.Add Key:=ShapeColumn, Order:=xlDescending
     .SortFields.Add Key:=POColumn, Order:=xlAscending
+    .SortFields.Add Key:=ShapeColumn, Order:=xlDescending
     .Header = xlYes
     .Apply
     End With
@@ -162,59 +177,108 @@ Sub RecvdFormattingtabs()
     Next cell
 
 'Format PO Sections
-LastRow = WTab.Range("a10000").End(xlUp).Row
+TheTABS = Array(WTab,LTab,CTab,PLTab,RBTab,HSSTab,COITab)
+TheRefs = Array(WTabName,LTabName,CTabName,PLTabName,RBTabName,HSSTabName,COITabName)
+dim wi as Long
+
+for wi = 0 to 6
+'debug.print theRefs(wi) & glb.name
+LastRow = TheTabs(wi).Range("a10000").End(xlUp).Row
 startrow = 2
-Set ShapeColumn = WTab.Range("l2:l" & LastRow + 50)
+u = 0
+redim varDiffVals(0)
+if TheTabs(wi).Range("B2").Value <> "" then
+Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
     For i = 1 To LastRow + 50
-        If WTab.Range("M" & i).Value <> "" Then
-            If WTab.Range("M" & i).Value <> WTab.Range("M" & i).Offset(1, 0).Value Then
-                WTab.Range("M" & i + 1).EntireRow.Insert
-                Set formatChunk = WTab.Range("A" & startrow + 1 & ":R" & i + 1)
-                debug.print formatchunk.rows.count
-                WTab.Range("j" & i + 1).Formula = "=Subtotal(9,J" & startrow + 1 & ":j" & i & ")"
-                WTab.Range("M" & i + 1).Value = WTab.Range("M" & i).Value & " Total"
-                WTab.Range("M" & i + 1).font.bold = true
-                WTab.Range("Q" & i+1).value = "TOTAL"
-                if formatchunk.rows.count > 2 then
-                    WTab.Range("Q" & i-1).value = "EPM"
-                    WTab.Range("Q" & i).value = "SL"
-                    WTab.Range("R" & i-1).formula = "=j" & i + 1
-                    WTab.Range("R" & i+1).formula = "=r" & i-1 & "-r" & i
+       If TheTabs(wi).Range("M" & i).Value <> "PO" then
+        If TheTabs(wi).Range("M" & i).Value <> "" Then
+            If TheTabs(wi).Range("M" & i).Value <> TheTabs(wi).Range("M" & i).Offset(1, 0).Value Then
+                TheTabs(wi).Range("M" & i + 1).EntireRow.Insert
+                
+                if i=2 then
+                    Set formatChunk = TheTabs(wi).Range("A" & i & ":R" & i + 1)
+                    TheTabs(wi).Range("j" & i + 1).Formula = "=Subtotal(9,J" & i & ":j" & i & ")"
+                Else    
+                    if startrow = 2 then startrow = 1
+                    Set formatChunk = TheTabs(wi).Range("A" & startrow + 1 & ":R" & i + 1)
+                    TheTabs(wi).Range("j" & i + 1).Formula = "=Subtotal(9,J" & startrow + 1 & ":j" & i & ")"
                 End If    
-            
+                
+                TheTabs(wi).Range("M" & i + 1).Value = TheTabs(wi).Range("M" & i).Value & " Total"
+                TheTabs(wi).Range("M" & i + 1).font.bold = true
+                TheTabs(wi).Range("Q" & i+1).value = "TOTAL"
+                TheTabs(wi).Range("Q" & i).value = "SL"
+                 
+                TheTabs(wi).Range("R" & i).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$J:$J)"
+                
+                
+                if formatchunk.rows.count > 2 then
+                    TheTabs(wi).Range("Q" & i-1).value = "EPM"
+                    TheTabs(wi).Range("R" & i-1).formula = "=j" & i + 1
+                    TheTabs(wi).Range("R" & i+1).formula = "=r" & i-1 & "-r" & i
+                End If
+                if formatchunk.rows.count = 2 then
+                    TheTabs(wi).Range("R" & i+1).formula = "=j" & i + 1 & "-r" & i
+                End If        
+                ReDim Preserve varDiffVals(0 To u)
+                varDiffVals(u)= "r" & TheTabs(wi).Range("R" & i+1).row
+                u = u + 1
 
                 formatChunk.BorderAround _
                 LineStyle:=xlContinuous, _
                 Weight:=xlThick
-                'formatChunk.Interior.Color = _
-                'RGB((Application.WorksheetFunction.RandBetween(0, 255)), _
-                '(Application.WorksheetFunction.RandBetween(0, 255)), _
-                '(Application.WorksheetFunction.RandBetween(0, 255)))
                 startrow = i + 1
                 i = i + 1
             End If
         End If
+       End If 
     Next
-WTab.Range("J2").EntireRow.Delete
-LastRow = WTab.Range("a10000").End(xlUp).Row
-WTab.Range("J" & LastRow + 2).Formula = "=Subtotal(9,J2:j" & LastRow & ")"
-wtab.range("J:J").Style = "Fixed"
-wtab.range("R:R").Style = "Currency"
+LastRow = TheTabs(wi).Range("a10000").End(xlUp).Row
+TheTabs(wi).Range("J" & LastRow + 2).Formula = "=Subtotal(9,J2:j" & LastRow & ")"
+TheTabs(wi).Range("M" & LastRow + 2).Value = "Grand Total"
+TheTabs(wi).Range("M" & LastRow + 2).font.bold = true
 
+TheTabs(wi).Range("Q" & LastRow + 2).Value = "EPM"
+TheTabs(wi).Range("Q" & LastRow + 3).Value = "SL"
+TheTabs(wi).Range("Q" & LastRow + 4).Value = "Add Used"
+TheTabs(wi).Range("Q" & LastRow + 5).Value = "Total"
+TheTabs(wi).Range("Q" & LastRow + 6).Value = "Diff"
+TheTabs(wi).Range("Q" & LastRow + 7).Value = "Recon"
+TheTabs(wi).Range("C" & LastRow + 8).Value = "DR"
+TheTabs(wi).Range("M" & LastRow + 8).Value = "CR"
 
+TheTabs(wi).Range("R" & LastRow + 2).Formula = "=J" & Lastrow + 2
+TheTabs(wi).Range("R" & Lastrow + 3).formula = "=SUM('["& glb.name & "]" & TheRefs(wi) & "'!$k:$k) - sum('["& glb.name & "]" & TheRefs(wi) & "'!$J:$J)"
+TheTabs(wi).Range("R" & Lastrow + 4).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L," & chr(34) & "Used" & chr(34) & ",'["& glb.name & "]" & TheRefs(wi) & "'!$K:$K) * -1"
+TheTabs(wi).Range("R" & LastRow + 5).Formula = "=sum(r" & lastrow + 2 & ":r" & lastrow + 4 & ")"
+TheTabs(wi).Range("R" & LastRow + 6).Formula = "=" & join(varDiffVals,"+")
+TheTabs(wi).Range("R" & LastRow + 7).Formula = "=(r" & lastrow + 5 & "-r" & lastrow + 6 & ")"
+
+TheTabs(wi).range("J:J").NumberFormat = "$#,##0.00_)"
+TheTabs(wi).range("R:R").NumberFormat = "$#,##0.00_)"
+TheTabs(wi).range("P:P").NumberFormat = "#,##0.000_)"
+TheTabs(wi).UsedRange.EntireColumn.AutoFit
+TheTabs(wi).range("A:A").EntireColumn.hidden = true
+TheTabs(wi).range("D:I").EntireColumn.hidden = true
+TheTabs(wi).range("K:L").EntireColumn.hidden = true
+TheTabs(wi).range("N:P").EntireColumn.hidden = true
+
+END IF
+
+next wi
 
 'Autosize all data columns
-    WTab.UsedRange.EntireColumn.AutoFit
-    LTab.UsedRange.EntireColumn.AutoFit
-    CTab.UsedRange.EntireColumn.AutoFit
-    PLTab.UsedRange.EntireColumn.AutoFit
-    RBTab.UsedRange.EntireColumn.AutoFit
-    HSSTab.UsedRange.EntireColumn.AutoFit
-    COITab.UsedRange.EntireColumn.AutoFit
+    'LTab.UsedRange.EntireColumn.AutoFit
+    'CTab.UsedRange.EntireColumn.AutoFit
+    'PLTab.UsedRange.EntireColumn.AutoFit
+    'RBTab.UsedRange.EntireColumn.AutoFit
+    'HSSTab.UsedRange.EntireColumn.AutoFit
+    'COITab.UsedRange.EntireColumn.AutoFit
 
 
-
+GLB.Close SaveChanges:=False
 Application.ScreenUpdating = True
+
 
 End Sub
 

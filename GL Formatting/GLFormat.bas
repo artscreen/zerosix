@@ -35,10 +35,10 @@ Sub SplitGLtabs()
             GLCode = cell.Offset(0, 1).Value
 
             If GLCode = "120002" Then TabName = "W 120002"
-            If GLCode = "120003" Then TabName = "L 120004"
-            If GLCode = "120004" Then TabName = "C MC 120005"
-            If GLCode = "120005" Then TabName = "CP FB PL 120006"
-            If GLCode = "120006" Then TabName = "RB REB SQ 120007"
+            If GLCode = "120003" Then TabName = "L 120003"
+            If GLCode = "120004" Then TabName = "C MC 120004"
+            If GLCode = "120005" Then TabName = "CP FB PL 120005"
+            If GLCode = "120006" Then TabName = "RB REB SQ 120006"
             If GLCode = "120007" Then TabName = "HSS HSSR PI 120007"
             If GLCode = "120013" Then TabName = "COI 120013"
             If GLCode = "127000" Then TabName = "MIT 127000"
