@@ -1,0 +1,15 @@
+Option Explicit
+
+Sub BreakExternalReferences()
+    Dim arLinks As Variant
+    Dim i As Long
+
+    arLinks = ActiveWorkbook.LinkSources(Type:=xlLinkTypeExcelLinks)
+
+    If IsArray(arLinks) Then
+        For i = LBound(arLinks) To UBound(arLinks)
+            ActiveWorkbook.BreakLink Name:=arLinks(i), Type:=xlLinkTypeExcelLinks
+        Next i
+    End If
+End Sub
+
