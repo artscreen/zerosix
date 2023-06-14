@@ -1,4 +1,4 @@
-Sub GLDetailProcess()
+Sub GLDetailProcess(control As IRibbonControl)
     
     Dim WB As Workbook
     Dim sltab As Worksheet
