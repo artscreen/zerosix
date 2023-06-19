@@ -4,7 +4,6 @@ Sub GLDetailProcess(control As IRibbonControl)
     Dim sltab As Worksheet
     Dim newtab As Worksheet
     Dim TabName As String
-    Dim shape As String
     Dim GLCode As String
     Dim columnA As Range
     Dim LastRow As Long
@@ -20,6 +19,7 @@ Sub GLDetailProcess(control As IRibbonControl)
     LastRow = sltab.Range("a10000").End(xlUp).Row + 1
     Set columnA = sltab.Range("a1:a" & LastRow)
 
+'FileCheck
     If Application.Sheets.Count > 1 Or sltab.Range("A1").Value <> "Type" Then
         MsgBox "This is not the correct file."
         Exit Sub
@@ -27,10 +27,12 @@ Sub GLDetailProcess(control As IRibbonControl)
     
     Application.ScreenUpdating = False
 
+'Define GL account data ranges
     For Each cell In columnA
 
         If cell.Value = "Acct:" Then
-            
+
+         'Determine GLCode and define tab names   
             startrow = cell.Row
             GLCode = cell.Offset(0, 1).Value
 
@@ -45,6 +47,7 @@ Sub GLDetailProcess(control As IRibbonControl)
             If GLCode = "129900" Then TabName = "RES 129900"
         End If
 
+        'Create Tabs
         If cell.Value = "Acct" Then
             
             endrow = cell.Row
@@ -57,7 +60,7 @@ Sub GLDetailProcess(control As IRibbonControl)
                     newtab.Name = TabName
                     
                     Set newtab = Sheets(TabName)
-                    
+                   'add headers 
                     sltab.Range("A" & startrow & ":L" & endrow).Copy newtab.Range("a1")
                     newtab.Range("a1").Value = "A"
                     newtab.Range("b1").Value = "B"
@@ -72,11 +75,10 @@ Sub GLDetailProcess(control As IRibbonControl)
                     newtab.Range("k1").Value = "CREDIT $"
                     newtab.Range("l1").Value = "PO"
                     newtab.Range("l2:l" & NewtabEnd).FormulaR1C1 = "=mid(RC[-3],find(""-"",RC[-3],1)-5,9)"
-                    
+                   
+                   'define and add pivot 
                     Set PRange = newtab.Range("A1:l" & NewtabEnd)
-
                     Set PCache = WB.PivotCaches.Create(SourceType:=xlDatabase, SourceData:=PRange)
-
                     Set Ptable = PCache.CreatePivotTable(TableDestination:=newtab.Cells(2, 15), TableName:=GLCode & "Pivot")
 
                     With ActiveSheet.PivotTables(GLCode & "Pivot").PivotFields("PO")
@@ -95,7 +97,7 @@ Sub GLDetailProcess(control As IRibbonControl)
                     .Function = xlSum
                     .NumberFormat = "_($* #,##0.00_);_($* (#,##0.00);_($* " & Chr(34) & "-" & Chr(34) & "??_);_(@_)"
                     End With
-           End If
+            End If
             newtab.UsedRange.EntireColumn.AutoFit
             
         End If
