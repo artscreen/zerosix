@@ -33,6 +33,7 @@ Sub EPMReceived_Processing(control As IRibbonControl)
     Dim TheTABS as variant
     Dim TheRefs as variant
     dim GLB as workbook
+    dim threshold as double
     
     Application.ScreenUpdating = False
 
@@ -208,7 +209,7 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
                 TheTabs(wi).Range("Q" & i+1).value = "TOTAL"
                 TheTabs(wi).Range("Q" & i).value = "SL"
                  
-                TheTabs(wi).Range("R" & i).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$J:$J)"
+                TheTabs(wi).Range("R" & i).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$J:$J) - SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$k:$k)"
                 
                 
                 if formatchunk.rows.count > 2 then
@@ -220,14 +221,17 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
                     TheTabs(wi).Range("R" & i+1).formula = "=j" & i + 1 & "-r" & i
                 End If
 
-                If Abs(TheTABS(wi).Range("R" & i + 1).Value) <= 2 Then
+'Specifies threshold in absolute value for write-off or not                
+                Threshold = 10
+
+                If Abs(TheTABS(wi).Range("R" & i + 1).Value) <= threshold Then
                     ReDim Preserve varDiffVals(0 To u)
                     varDiffVals(u)= "r" & TheTabs(wi).Range("R" & i+1).row
                     u = u + 1
                     formatChunk.interior.color = RGB(0,176,240)
                 End if
 
-                If Abs(TheTABS(wi).Range("R" & i + 1).Value) > 2 Then
+                If Abs(TheTABS(wi).Range("R" & i + 1).Value) > threshold Then
                     formatChunk.interior.color = RGB(255,255,0)
                 End if 
 
