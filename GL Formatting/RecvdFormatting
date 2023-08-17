@@ -124,8 +124,7 @@ Sub EPMReceived_Processing(control As IRibbonControl)
         If cell.Value <> "" Then
           
             If cell.Value <> cell.Offset(1, 0).Value Then
-                'Debug.Print cell.Value & "--" & startrow & "--" & cell.Row
-
+                
                 Set CopyChunk = RecvSheet.Range("a" & startrow & ":P" & cell.Row)
 
                 If cell.Value = "W" Or cell.Value = "S" Then
@@ -221,8 +220,11 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
                     TheTabs(wi).Range("R" & i+1).formula = "=j" & i + 1 & "-r" & i
                 End If
 
-'Specifies threshold in absolute value for write-off or not                
+'Specifies threshold in absolute value for write-off or not - threshold is absolute value                
+            
                 Threshold = 10
+
+'Identify and color code sections
 
                 If Abs(TheTABS(wi).Range("R" & i + 1).Value) <= threshold Then
                     ReDim Preserve varDiffVals(0 To u)
@@ -239,6 +241,7 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
                     formatChunk.interior.color = RGB(146,208,80)
                 End if    
 
+'add borders
                 formatChunk.BorderAround _
                 LineStyle:=xlContinuous, _
                 Weight:=xlThick
