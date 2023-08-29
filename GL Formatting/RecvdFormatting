@@ -207,8 +207,10 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
                 TheTabs(wi).Range("M" & i + 1).font.bold = true
                 TheTabs(wi).Range("Q" & i+1).value = "TOTAL"
                 TheTabs(wi).Range("Q" & i).value = "SL"
-                 
-                TheTabs(wi).Range("R" & i).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$J:$J) - SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$k:$k)"
+
+            'Credit or no credit, who the hell knows.  First line, no credit, second line - credit. Pick ONE     
+                TheTabs(wi).Range("R" & i).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$J:$J)"
+                'TheTabs(wi).Range("R" & i).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$J:$J) - SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L,M" & i & ",'["& glb.name & "]" & TheRefs(wi) & "'!$k:$k)"
                 
                 
                 if formatchunk.rows.count > 2 then
@@ -251,28 +253,40 @@ Set ShapeColumn = TheTabs(wi).Range("l2:l" & LastRow + 50)
         End If
        End If 
     Next
+
+'add totals and subtotals at bottom
+
 LastRow = TheTabs(wi).Range("a10000").End(xlUp).Row
 TheTabs(wi).Range("J" & LastRow + 2).Formula = "=Subtotal(9,J2:j" & LastRow & ")"
 TheTabs(wi).Range("M" & LastRow + 2).Value = "Grand Total"
 TheTabs(wi).Range("M" & LastRow + 2).font.bold = true
 
+'labels and totals
 TheTabs(wi).Range("Q" & LastRow + 2).Value = "EPM"
+TheTabs(wi).Range("R" & LastRow + 2).Formula = "=J" & Lastrow + 2
+
 TheTabs(wi).Range("Q" & LastRow + 3).Value = "SL"
+TheTabs(wi).Range("R" & Lastrow + 3).formula = "=SUM('["& glb.name & "]" & TheRefs(wi) & "'!$k:$k) - sum('["& glb.name & "]" & TheRefs(wi) & "'!$J:$J)"
+
 TheTabs(wi).Range("Q" & LastRow + 4).Value = "Add Used"
+TheTabs(wi).Range("R" & Lastrow + 4).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L," & chr(34) & "Used" & chr(34) & ",'["& glb.name & "]" & TheRefs(wi) & "'!$K:$K) * -1"
+
 TheTabs(wi).Range("Q" & LastRow + 5).Value = "Total"
+TheTabs(wi).Range("R" & LastRow + 5).Formula = "=sum(r" & lastrow + 2 & ":r" & lastrow + 4 & ")"
+
 TheTabs(wi).Range("Q" & LastRow + 6).Value = "Diff"
+TheTabs(wi).Range("R" & LastRow + 6).Formula = "=" & join(varDiffVals,"+")
+TheTabs(wi).Range("R" & LastRow + 6).interior.color = RGB(0,176,240)
+
 TheTabs(wi).Range("Q" & LastRow + 7).Value = "Recon"
+TheTabs(wi).Range("R" & LastRow + 7).Formula = "=(r" & lastrow + 5 & "-r" & lastrow + 6 & ")"
+
+
+'DR and CR headers
 TheTabs(wi).Range("C" & LastRow + 8).Value = "DR"
 TheTabs(wi).Range("M" & LastRow + 8).Value = "CR"
 
-TheTabs(wi).Range("R" & LastRow + 2).Formula = "=J" & Lastrow + 2
-TheTabs(wi).Range("R" & Lastrow + 3).formula = "=SUM('["& glb.name & "]" & TheRefs(wi) & "'!$k:$k) - sum('["& glb.name & "]" & TheRefs(wi) & "'!$J:$J)"
-TheTabs(wi).Range("R" & Lastrow + 4).formula = "=SUMIF('["& glb.name & "]" & TheRefs(wi) & "'!$L:$L," & chr(34) & "Used" & chr(34) & ",'["& glb.name & "]" & TheRefs(wi) & "'!$K:$K) * -1"
-TheTabs(wi).Range("R" & LastRow + 5).Formula = "=sum(r" & lastrow + 2 & ":r" & lastrow + 4 & ")"
-TheTabs(wi).Range("R" & LastRow + 6).Formula = "=" & join(varDiffVals,"+")
-TheTabs(wi).Range("R" & LastRow + 6).interior.color = RGB(0,176,240)
-TheTabs(wi).Range("R" & LastRow + 7).Formula = "=(r" & lastrow + 5 & "-r" & lastrow + 6 & ")"
-
+'formatting and column visibility
 TheTabs(wi).range("J:J").NumberFormat = "$#,##0.00_)"
 TheTabs(wi).range("R:R").NumberFormat = "$#,##0.00_)"
 TheTabs(wi).range("P:P").NumberFormat = "#,##0.000_)"
@@ -286,6 +300,7 @@ END IF
 
 next wi
 
+'uncomment below to close GL workbook
 'GLB.Close SaveChanges:=False
 Application.ScreenUpdating = True
 
